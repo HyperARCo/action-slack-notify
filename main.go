@@ -28,7 +28,6 @@ const (
 	EnvGithubActor    = "GITHUB_ACTOR"
 	EnvGithubRun      = "GITHUB_RUN"
 	EnvSiteName       = "SITE_NAME"
-	EnvHostName       = "HOST_NAME"
 	EnvMinimal        = "MSG_MINIMAL"
 	EnvSlackLinkNames = "SLACK_LINK_NAMES"
 	EnvThreadTs       = "SLACK_THREAD_TS"
@@ -212,17 +211,12 @@ func main() {
 			fields = append(mainFields, fields...)
 		}
 
-		hostName := getEnv(EnvHostName)
-		if hostName != "" {
+		siteName := getEnv(EnvSiteName)
+		if siteName != "" {
 			newfields := []Field{
 				{
 					Title: getEnv("SITE_TITLE"),
 					Value: getEnv(EnvSiteName),
-					Short: true,
-				},
-				{
-					Title: getEnv("HOST_TITLE"),
-					Value: getEnv(EnvHostName),
 					Short: true,
 				},
 			}

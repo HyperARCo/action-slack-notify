@@ -28,7 +28,7 @@ if [[ -z "$SLACK_WEBHOOK" ]]; then
 	# Login to vault using GH Token
 	if [[ -n "$VAULT_GITHUB_TOKEN" ]]; then
 		unset VAULT_TOKEN
-		vault login -method=github token="$VAULT_GITHUB_TOKEN" > /dev/null
+		vault login -method=github token="$VAULT_GITHUB_TOKEN" >/dev/null
 	fi
 
 	if [[ -n "$VAULT_GITHUB_TOKEN" ]] || [[ -n "$VAULT_TOKEN" ]]; then
@@ -38,7 +38,7 @@ if [[ -z "$SLACK_WEBHOOK" ]]; then
 fi
 
 if [[ -z "$SLACK_WEBHOOK" ]]; then
-  printf "[\e[0;31mERROR\e[0m] Secret \`SLACK_WEBHOOK\` is missing. Falling back to using \`SLACK_TOKEN\` and \`SLACK_CHANNEL\`.\n"
+	printf "[\e[0;31mERROR\e[0m] Secret \`SLACK_WEBHOOK\` is missing. Falling back to using \`SLACK_TOKEN\` and \`SLACK_CHANNEL\`.\n"
 fi
 
 if [[ -f "$hosts_file" ]]; then
@@ -50,30 +50,25 @@ if [[ -f "$hosts_file" ]]; then
 
 	temp_url="${DEPLOY_PATH%%/app*}"
 	export SITE_NAME="${temp_url##*sites/}"
-    export HOST_TITLE="SSH Host"
+	export HOST_TITLE="SSH Host"
 fi
 
 PR_SHA="$(cat "$GITHUB_EVENT_PATH" | jq -r .pull_request.head.sha)"
 [[ 'null' != "$PR_SHA" ]] && export GITHUB_SHA="$PR_SHA"
-
-if [[ -n "$SITE_NAME" ]]; then
-    export SITE_TITLE="Site"
-fi
-
 
 if [[ -z "$SLACK_MESSAGE" && "null" != "$COMMIT_MESSAGE" ]]; then
 	SLACK_MESSAGE="$COMMIT_MESSAGE"
 fi
 
 if [[ -z "$SLACK_MESSAGE" ]]; then
-  SLACK_MESSAGE="Notification from action run \`$GITHUB_RUN_NUMBER\`, which ran against commit \`${GITHUB_SHA}\` from branch \`${GITHUB_BRANCH}\` of \`${GITHUB_REPOSITORY}\` repository."
+	SLACK_MESSAGE="Notification from action run \`$GITHUB_RUN_NUMBER\`, which ran against commit \`${GITHUB_SHA}\` from branch \`${GITHUB_BRANCH}\` of \`${GITHUB_REPOSITORY}\` repository."
 fi
 
 if [[ "true" == "$ENABLE_ESCAPES" ]]; then
-  SLACK_MESSAGE="$(echo -e "$SLACK_MESSAGE")"
-  SLACK_MESSAGE_ON_SUCCESS="$(echo -e "$SLACK_MESSAGE_ON_SUCCESS")"
-  SLACK_MESSAGE_ON_FAILURE="$(echo -e "$SLACK_MESSAGE_ON_FAILURE")"
-  SLACK_MESSAGE_ON_CANCEL="$(echo -e "$SLACK_MESSAGE_ON_CANCEL")"
+	SLACK_MESSAGE="$(echo -e "$SLACK_MESSAGE")"
+	SLACK_MESSAGE_ON_SUCCESS="$(echo -e "$SLACK_MESSAGE_ON_SUCCESS")"
+	SLACK_MESSAGE_ON_FAILURE="$(echo -e "$SLACK_MESSAGE_ON_FAILURE")"
+	SLACK_MESSAGE_ON_CANCEL="$(echo -e "$SLACK_MESSAGE_ON_CANCEL")"
 fi
 
 export SLACK_MESSAGE
